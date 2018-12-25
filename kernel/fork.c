@@ -84,6 +84,8 @@
 
 #include <trace/events/sched.h>
 
+#include <time.h>
+
 #define CREATE_TRACE_POINTS
 #include <trace/events/task.h>
 
