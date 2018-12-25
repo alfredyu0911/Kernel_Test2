@@ -2820,13 +2820,16 @@ need_resched:
 		rq->curr = next;
 		++*switch_count;
 
+		struct timeval currentTime;
+		do_gettimeofday(&currentTime);
 		// 現在時間 減掉 前一次被 switch out 的時間 = next 的 idle time
-		next->idleTimes += time(NULL) - next->switchOutTime;
+		next->idleTimes += currentTime.tv_sec - next->switchOutTime;
 
 		rq = context_switch(rq, prev, next); /* unlocks the rq */
 
 		// 紀錄 prev 被 switch out 的時間，開始計時 idle time
-		prev->switchOutTime = time(NULL);
+		do_gettimeofday(&currentTime);
+		prev->switchOutTime = currentTime.tv_sec;
 		// 根據 Hint 3，應該只有被 switch in 的才算一次 context switch
 		next->switchCounter++;
 

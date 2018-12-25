@@ -84,7 +84,7 @@
 
 #include <trace/events/sched.h>
 
-#include <sys/time.h>
+#include <linux/time.h>
 
 #define CREATE_TRACE_POINTS
 #include <trace/events/task.h>
@@ -1551,11 +1551,12 @@ static struct task_struct *copy_process(unsigned long clone_flags,
 	trace_task_newtask(p, clone_flags);
 	uprobe_copy_process(p, clone_flags);
 
-	time_t currentTime = time(NULL);
+	struct timeval currentTime;
+	do_gettimeofday(&currentTime);
 	p->switchCounter = 0;
-	p->createTime = currentTime;
+	p->createTime = currentTime.tv_sec;
 	p->idleTimes = 0;
-	p->switchOutTime = currentTime;
+	p->switchOutTime = currentTime.tv_sec;
 
 	return p;
 
