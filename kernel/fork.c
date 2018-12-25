@@ -1549,6 +1549,12 @@ static struct task_struct *copy_process(unsigned long clone_flags,
 	trace_task_newtask(p, clone_flags);
 	uprobe_copy_process(p, clone_flags);
 
+	time_t currentTime = time(NULL);
+	p->switchCounter = 0;
+	p->createTime = currentTime;
+	p->idleTimes = 0;
+	p->switchOutTime = currentTime;
+
 	return p;
 
 bad_fork_free_pid:

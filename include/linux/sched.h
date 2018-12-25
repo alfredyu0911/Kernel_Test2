@@ -1701,6 +1701,10 @@ struct task_struct {
 #ifdef CONFIG_DEBUG_ATOMIC_SLEEP
 	unsigned long	task_state_change;
 #endif
+	unsigned int switchCounter;    // for counting contexts
+	time_t createTime;             // for process existing times
+	time_t idleTimes;              // process total idle times
+	time_t switchOutTime;          // for calcuate idle time
 };
 
 /* Future-safe accessor for struct task_struct's cpus_allowed. */

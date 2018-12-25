@@ -2820,7 +2820,16 @@ need_resched:
 		rq->curr = next;
 		++*switch_count;
 
+		// 現在時間 減掉 前一次被 switch out 的時間 = next 的 idle time
+		next->idleTimes += time(NULL) - next->switchOutTime;
+
 		rq = context_switch(rq, prev, next); /* unlocks the rq */
+
+		// 紀錄 prev 被 switch out 的時間，開始計時 idle time
+		prev->switchOutTime = time(NULL);
+		// 根據 Hint 3，應該只有被 switch in 的才算一次 context switch
+		next->switchCounter++;
+
 		cpu = cpu_of(rq);
 	} else
 		raw_spin_unlock_irq(&rq->lock);
