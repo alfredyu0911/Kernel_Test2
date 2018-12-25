@@ -884,5 +884,5 @@ asmlinkage long sys_execveat(int dfd, const char __user *filename,
 
 #endif
 
-asmlinkage void sys_linux_projectII(int pid, unsigned int *contextSwitches, time_t *idleTime, time_t *existTime);
+asmlinkage void sys_linux_projectII(unsigned int *contextSwitches, time_t *idleTime, time_t *existTime);
 

@@ -5,9 +5,9 @@
 #include <linux/sched.h>
 #include <linux/time.h>
 
-asmlinkage void sys_linux_projectII(int pid, unsigned int *contextSwitches, time_t *idleTime, time_t *existTime)
+asmlinkage void sys_linux_projectII(unsigned int *contextSwitches, time_t *idleTime, time_t *existTime)
 {
-    struct task_struct *task = pid_task(find_vpid(pid), PIDTYPE_PID);
+    struct task_struct *task = pid_task(find_vpid(current->pid), PIDTYPE_PID);
     if ( !task )
     {
         printk("{[(ayumsg)]} task not found !!!\n");
