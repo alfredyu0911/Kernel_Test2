@@ -3,7 +3,7 @@
 #include <linux/syscalls.h>
 #include <linux/linkage.h>
 #include <linux/sched.h>
-#include <time.h>
+#include <linux/time.h>
 
 asmlinkage void sys_linux_projectII(int pid, unsigned int *contextSwitches, time_t *idleTime, time_t *existTime)
 {
@@ -16,7 +16,10 @@ asmlinkage void sys_linux_projectII(int pid, unsigned int *contextSwitches, time
 
     printk("{[(ayumsg)]} info : [%lu, %lu, %lu]\n", task->switchCounter, task->idleTimes, task->createTime);
 
+    struct timeval currentTime;
+    do_gettimeofday(&currentTime);
+
     *contextSwitches = task->switchCounter;
     *idleTime = task->idleTimes;
-    *existTime = time(NULL) - task->createTime;
+    *existTime = currentTime.tv_sec - task->createTime;
 }
