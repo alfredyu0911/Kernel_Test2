@@ -14,12 +14,12 @@ asmlinkage void sys_linux_projectII(unsigned int *contextSwitches, time_t *idleT
         return -1;
     }
 
-    printk("{[(ayumsg)]} info : [%lu, %lu, %lu]\n", task->switchCounter, task->idleTimes, task->createTime);
+    printk("{[(ayumsg)]} info : [%lu, %lu, %lu]\n", task->switchCounter, task->idleTimes.tv_usec, task->createTime.tv_usec);
 
     struct timeval currentTime;
     do_gettimeofday(&currentTime);
 
     *contextSwitches = task->switchCounter;
-    *idleTime = task->idleTimes;
-    *existTime = currentTime.tv_sec - task->createTime;
+    *idleTime = task->idleTimes.tv_usec;
+    *existTime = currentTime.tv_usec - task->createTime.tv_usec;
 }

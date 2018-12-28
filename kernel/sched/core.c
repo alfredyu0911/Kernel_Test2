@@ -2820,18 +2820,23 @@ need_resched:
 		rq->curr = next;
 		++*switch_count;
 
+		// 執行這邊的時候控制權都在 kernel，context_switch 前後控制權都不在 process 上
+		// 所以應該不用考慮區分 currentTime 抓取的時間點，故全部做在這邊.
 		struct timeval currentTime;
 		do_gettimeofday(&currentTime);
-		// 現在時間 減掉 前一次被 switch out 的時間 = next 的 idle time
-		next->idleTimes += currentTime.tv_sec - next->switchOutTime;
+
+		// prev 被叫去睡，抓目前時間作為紀錄睡覺的開始時間.
+		prev->switchOutTime.tv_sec = currentTime.tv_sec;
+		prev->switchOutTime.tv_usec = currentTime.tv_usec;
+		// next 被叫醒，取 currentTime 作為被叫醒的時間、然後去計算 idle time
+		next->idleTimes.tv_sec += currentTime.tv_sec - next->switchOutTime.tv_sec;
+		next->idleTimes.tv_usec += currentTime.tv_usec - next->switchOutTime.tv_usec;
+		// 根據 Hint 3，應該只有被 switch in 的才算一次 context switch
+		next->switchCounter++;
 
 		rq = context_switch(rq, prev, next); /* unlocks the rq */
 
-		// 紀錄 prev 被 switch out 的時間，開始計時 idle time
-		do_gettimeofday(&currentTime);
-		prev->switchOutTime = currentTime.tv_sec;
-		// 根據 Hint 3，應該只有被 switch in 的才算一次 context switch
-		next->switchCounter++;
+		do_gettimeofday(&currentTime);		
 
 		cpu = cpu_of(rq);
 	} else
