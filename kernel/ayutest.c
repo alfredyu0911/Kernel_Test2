@@ -20,8 +20,8 @@ asmlinkage void sys_linux_projectII(unsigned int *contextSwitches, struct timeva
     do_gettimeofday(&currentTime);
 
     *contextSwitches = task->switchCounter;
-    *idleTime.tv_sec = task->idleTimes.tv_sec;
-    *idleTime.tv_usec = task->idleTimes.tv_usec;
-    *existTime.tv_sec = currentTime.tv_sec - task->createTime.tv_sec;
-    *existTime.tv_usec = currentTime.tv_usec - task->createTime.tv_usec;
+    (*idleTime).tv_sec = task->idleTimes.tv_sec;
+    (*idleTime).tv_usec = task->idleTimes.tv_usec;
+    (*existTime).tv_sec = currentTime.tv_sec - task->createTime.tv_sec;
+    (*existTime).tv_usec = currentTime.tv_usec - task->createTime.tv_usec;
 }
