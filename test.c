@@ -67,5 +67,5 @@ void main(int argc, char *argv[])
 
     // temp_ul=(ps_info.time.tv_sec * 1000000 + ps_info.time.tv_usec);
     printf("The process has made %ld process switches\n", cs_counter);
-    printf("This process has idle %ul usecs\n", idle); 
+    printf("This process has idle %lu usecs\n", idle); 
 }

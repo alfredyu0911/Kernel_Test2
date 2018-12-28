@@ -1551,14 +1551,10 @@ static struct task_struct *copy_process(unsigned long clone_flags,
 	trace_task_newtask(p, clone_flags);
 	uprobe_copy_process(p, clone_flags);
 
-	struct timeval currentTime;
-	do_gettimeofday(&currentTime);
+	do_gettimeofday(&p->createTime);
+	do_gettimeofday(&p->switchOutTime);
 	p->switchCounter = 0;
-	p->createTime.tv_sec = currentTime.tv_sec;
-	p->createTime.tv_usec = currentTime.tv_usec;
 	p->idleTimes.tv_sec = p->idleTimes.tv_usec = 0;
-	p->switchOutTime.tv_sec = currentTime.tv_sec;
-	p->switchOutTime.tv_usec = currentTime.tv_usec;
 
 	return p;
 
