@@ -14,8 +14,6 @@ asmlinkage void sys_linux_projectII(unsigned int *contextSwitches, struct timeva
         return -1;
     }
 
-    // printk("{[(ayumsg)]} info : [%lu, %lu, %lu]\n", task->switchCounter, task->idleTimes.tv_usec, task->createTime.tv_usec);
-
     struct timeval currentTime;
     do_gettimeofday(&currentTime);
 
